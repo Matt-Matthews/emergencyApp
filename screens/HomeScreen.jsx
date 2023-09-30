@@ -6,8 +6,8 @@ import Ionicons from '@expo/vector-icons/Ionicons'
 export class HomeScreen extends Component {
   render() {
     const {navigation} = this.props
-    const handleSendEmergency = () => {
-      navigation.navigate('Map')
+    const handleSendEmergency = (type) => {
+      navigation.navigate('Map',{type})
     }
     return (
       <SafeAreaView style={{backgroundColor: '#fff', flex: 1, padding: 10}}>
@@ -25,7 +25,7 @@ export class HomeScreen extends Component {
             </View>
           </View>
           <View style={styles.emeBtnShadow}>
-            <Pressable onPress={handleSendEmergency} style={styles.emeBtnRed}>
+            <Pressable onPress={()=>handleSendEmergency('general')} style={styles.emeBtnRed}>
               <View style={styles.emeBtn}>
                 <Image source={require('../assets/emergencyIcon.png')} />
               </View>
@@ -40,19 +40,19 @@ export class HomeScreen extends Component {
 
           <View style={{marginTop: 30, display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
             <View style={styles.emTypeBtn}>
-                <Pressable onPress={handleSendEmergency} style={styles.emTypeBtnPress}>
+                <Pressable onPress={()=>handleSendEmergency('medical')} style={styles.emTypeBtnPress}>
                   <Image source={require('../assets/medical.png')}  />
                   <Text style={{marginTop: 5}}>Medical</Text>
                 </Pressable>
             </View>
             <View style={styles.emTypeBtn}>
-                <Pressable onPress={handleSendEmergency} style={styles.emTypeBtnPress}>
+                <Pressable onPress={()=>handleSendEmergency('fire')} style={styles.emTypeBtnPress}>
                   <Image source={require('../assets/fire.png')}  />
                   <Text style={{marginTop: 5}} >Fire</Text>
                 </Pressable>
             </View>
             <View style={styles.emTypeBtn}>
-                <Pressable onPress={handleSendEmergency} style={styles.emTypeBtnPress}>
+                <Pressable onPress={()=>handleSendEmergency('crime')} style={styles.emTypeBtnPress}>
                   <Image source={require('../assets/shield.png')}  />
                   <Text style={{marginTop: 5}}>Crime</Text>
                 </Pressable>

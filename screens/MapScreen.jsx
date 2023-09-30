@@ -4,6 +4,7 @@ import MapView, { Marker } from 'react-native-maps'
 import {SafeAreaView} from 'react-native-safe-area-context'
 import Ionicons from '@expo/vector-icons/Ionicons'
 import * as Location from 'expo-location'
+import { useRoute } from '@react-navigation/native'
 
 export default function MapScreen({navigation}) {
       const _goBack = () => {
@@ -11,6 +12,10 @@ export default function MapScreen({navigation}) {
       }
       const [location, setLocation] = useState(null);
       const [errorMsg, setErrorMsg] = useState(null);
+      const route = useRoute();
+      const { type } = route.params;
+
+     
 
       useEffect(() => {
         (async () => {
@@ -48,11 +53,22 @@ export default function MapScreen({navigation}) {
               </Pressable> */}
             </View>
           </View>
+          
         <MapView style={styles.map} region={location}>
             <Marker onDragEnd={(e)=>setCurrentLocation(e)}  coordinate={location} draggable> 
-                <Image source={require('../assets/emergencyIcon.png')} />
+                {type==='general'&&<View style={{backgroundColor: '#FA4C4C',}}>
+                  <Image source={require('../assets/emergencyIcon.png')} />
+                </View>}
+                {type==='medical'&&<Image source={require('../assets/medical.png')} />}
+                {type==='fire'&&<Image source={require('../assets/fire.png')} />}
+                {type==='crime'&&<Image source={require('../assets/shield.png')} />}
             </Marker>
         </MapView>
+        <View style={styles.confBtn}>
+            <Pressable>
+              <Text style={{color: '#fff', alignSelf: 'center'}}>Confirm</Text>
+            </Pressable>
+        </View>
       </SafeAreaView>
     )
 }
@@ -60,6 +76,7 @@ export default function MapScreen({navigation}) {
 const styles = StyleSheet.create({
     container: {
       flex: 1,
+      position: 'relative'
     },
     header: {
         display: 'flex', 
@@ -73,6 +90,7 @@ const styles = StyleSheet.create({
     map: {
       width: '100%',
       height: '93%',
+      position: 'relative'
     },
     btn: {
         backgroundColor: '#fffff',
@@ -91,4 +109,15 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
     },
+    confBtn: {
+      height: 37,
+      width: 100,
+      backgroundColor: '#FA4C4C',
+      bottom: 10,
+      right: 10,
+      borderRadius: 25,
+      alignContent: 'center',
+      justifyContent: 'space-around',
+      position: 'absolute'
+    }
   });
