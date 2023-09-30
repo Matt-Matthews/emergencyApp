@@ -26,6 +26,7 @@ export default function MapScreen({navigation}) {
             lon: location.longitude,},
           type,
           userId: "2",
+          timestamp: new Date().getTime()
         };
   
         try {
@@ -46,7 +47,6 @@ export default function MapScreen({navigation}) {
             setErrorMsg('Permission to access location was denied');
             return;
           }
-    
           let {coords} = await Location.getCurrentPositionAsync({});
 
           if(coords){
@@ -57,7 +57,7 @@ export default function MapScreen({navigation}) {
               longitudeDelta: 0.0421});
             let addressData = await Location.reverseGeocodeAsync({latitude, longitude})
             // console.log(addressData[0])
-            let addData = addressData[0].streetNumber+', '+ addressData[0].street + ', '+ addressData[0].city+', '+ addressData[0].region+', '+ addressData[0].postalCode
+            let addData = addressData[0].streetNumber+' '+ addressData[0].street + ', '+ addressData[0].city+', '+ addressData[0].region+', '+ addressData[0].postalCode
             setAddress(addData)
             console.log(addData)
           }
