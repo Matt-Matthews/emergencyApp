@@ -22,8 +22,8 @@ export default function MapScreen({navigation}) {
         const event = {
           address: address,
           location: {
-            latitude: location.latitude,
-            longitude: location.longitude,},
+            lat: location.latitude,
+            lon: location.longitude,},
           type,
           userId: "2",
         };
