@@ -2,38 +2,18 @@ import { Text, View, Pressable, StyleSheet, Image } from "react-native";
 import React, { Component } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { addDoc, collection, doc, setDoc } from "firebase/firestore";
-import { database } from "../firebase";
 
 export class HomeScreen extends Component {
   render() {
     const { navigation } = this.props;
     const handleSendEmergency = (type) => {
-      // navigation.navigate('Map')
-      publicEvent(type);
+      navigation.navigate('Map',{type})
+    
     };
 
     // TODO: Move this to the map page, and then update the address and location
     // TODO: For address we can use the google service api for getting the address
-    const publicEvent = async (type) => {
-      const event = {
-        address: "Century City",
-        location: {
-          lat: -33.8899,
-          lon: 18.5066,
-        },
-        type,
-        userId: "2",
-      };
-
-      try {
-        // await setDoc(doc(database, "Events"), event);
-        await addDoc(collection(database, "Events"), event);
-        console.log("Saved document successfully.");
-      } catch (e) {
-        console.log("ERROR: ", e);
-      }
-    };
+    
 
     return (
       <SafeAreaView style={{ backgroundColor: "#fff", flex: 1, padding: 10 }}>

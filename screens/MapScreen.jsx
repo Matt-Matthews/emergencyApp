@@ -5,6 +5,8 @@ import {SafeAreaView} from 'react-native-safe-area-context'
 import Ionicons from '@expo/vector-icons/Ionicons'
 import * as Location from 'expo-location'
 import { useRoute } from '@react-navigation/native'
+import { addDoc, collection, doc, setDoc } from "firebase/firestore";
+import { database } from "../firebase";
 
 export default function MapScreen({navigation}) {
       const _goBack = () => {
@@ -12,10 +14,29 @@ export default function MapScreen({navigation}) {
       }
       const [location, setLocation] = useState(null);
       const [errorMsg, setErrorMsg] = useState(null);
+      const [address, setAddress] = useState(null);
       const route = useRoute();
       const { type } = route.params;
 
-     
+      const publicEvent = async () => {
+        const event = {
+          address: address,
+          location: {
+            latitude: location.latitude,
+            longitude: location.longitude,},
+          type,
+          userId: "2",
+        };
+  
+        try {
+          // await setDoc(doc(database, "Events"), event);
+          await addDoc(collection(database, "Events"), event);
+          console.log("Saved document successfully.");
+          _goBack()
+        } catch (e) {
+          console.log("ERROR: ", e);
+        }
+      };
 
       useEffect(() => {
         (async () => {
@@ -26,11 +47,20 @@ export default function MapScreen({navigation}) {
             return;
           }
     
-          let location = await Location.getCurrentPositionAsync({});
-          setLocation({latitude: location.coords.latitude,
-            longitude: location.coords.longitude, 
-            latitudeDelta: 0.0922,
-            longitudeDelta: 0.0421});
+          let {coords} = await Location.getCurrentPositionAsync({});
+
+          if(coords){
+            let {latitude, longitude} = coords
+            setLocation({latitude: latitude,
+              longitude: longitude, 
+              latitudeDelta: 0.0922,
+              longitudeDelta: 0.0421});
+            let addressData = await Location.reverseGeocodeAsync({latitude, longitude})
+            // console.log(addressData[0])
+            let addData = addressData[0].streetNumber+', '+ addressData[0].street + ', '+ addressData[0].city+', '+ addressData[0].region+', '+ addressData[0].postalCode
+            setAddress(addData)
+            console.log(addData)
+          }
         })();
       }, []);
     
@@ -65,7 +95,7 @@ export default function MapScreen({navigation}) {
             </Marker>
         </MapView>
         <View style={styles.confBtn}>
-            <Pressable>
+            <Pressable onPress={publicEvent}>
               <Text style={{color: '#fff', alignSelf: 'center'}}>Confirm</Text>
             </Pressable>
         </View>
