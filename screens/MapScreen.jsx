@@ -84,7 +84,7 @@ export default function MapScreen({navigation}) {
             </View>
           </View>
           
-        <MapView style={styles.map} region={location}>
+        <MapView  style={styles.map} region={location}>
             <Marker onDragEnd={(e)=>setCurrentLocation(e)}  coordinate={location} draggable> 
                 {type==='general'&&<View style={{backgroundColor: '#FA4C4C',}}>
                   <Image source={require('../assets/emergencyIcon.png')} />
